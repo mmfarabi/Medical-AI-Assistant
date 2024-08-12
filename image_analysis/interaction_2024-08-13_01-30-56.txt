@@ -1,0 +1,20 @@
+User Input:
+Analysis Type: xray_description
+Custom Prompt: 
+
+Response:
+## X-ray Report
+
+**Findings:**
+
+1. This is an X-ray image of the right forearm, taken from an anterior-posterior view. The image demonstrates the distal radius, ulna, and carpal bones. 
+
+2. There is a transverse fracture of the distal radius, approximately 2 cm proximal to the radiocarpal joint. The fracture fragments are slightly displaced, with approximately 2 mm of overriding. There is no evidence of associated ulna fracture. 
+
+**Interpretation:**
+
+1. The transverse fracture of the distal radius is consistent with a classic Colles fracture. This type of fracture often occurs due to a fall onto an outstretched hand, with the force directed through the radius. 
+
+2. A Colles fracture typically causes significant pain and swelling at the wrist, as well as difficulty moving the hand. The patient may also experience bruising or numbness in the hand and fingers.
+
+3. The treatment approach for a Colles fracture depends on the severity of the fracture and displacement. Non-operative treatment with a cast or splint is often the initial option for minimally displaced fractures.  For displaced fractures, surgical intervention with open reduction and internal fixation (ORIF) may be necessary to achieve proper alignment and stability. Rehabilitation following treatment usually involves physical therapy to regain strength and function in the hand and wrist. 
