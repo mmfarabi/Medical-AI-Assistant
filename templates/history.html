@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" />
+        <title>History</title>
+        <style>
+            /* ... (Add your CSS styles here or link to an external stylesheet) ... */
+            body {
+                font-family: sans-serif;
+                background-color: #f2f2f2;
+                margin: 0;
+                padding: 0;
+            }
+
+            h1 {
+                text-align: center;
+                display: block;
+                font-size: 2em;
+                margin-block-start: 0.67em;
+                margin-block-end: 0.67em;
+                margin-inline-start: 0px;
+                margin-inline-end: 0px;
+                font-weight: bold;
+                unicode-bidi: isolate;
+                background-color: white; /* Background color of the text */
+                color: #007bff;  /* Text color */
+                padding-bottom: 30px;
+
+            }
+
+            h2, h3 {
+                text-align: center;
+                padding: 20px;
+                color: white;
+            }
+
+            h2 {
+                background-color: #007bff;
+            }
+
+            h3 {
+                background-color: #6c757d;
+            }
+
+            .container {
+                max-width: 800px;
+                margin: 20px auto;
+                padding: 20px;
+                background-color: white;
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+
+            pre {
+                white-space: pre-wrap;
+                background-color: #eee;
+                padding: 10px;
+                border-radius: 4px;
+                overflow-x: auto;
+            }
+
+            .interaction-content {
+                display: none;
+                margin-left: 20px;
+                border-left: 2px solid #ddd;
+                padding-left: 15px;
+                white-space: pre-wrap;
+                background-color: #eee;
+                padding: 10px;
+                border-radius: 4px;
+                overflow-x: auto;
+            }
+
+            .interaction-header {
+                cursor: pointer;
+            }
+
+            /* Navigation Bar Styles */
+            .navbar {
+                background-color: #333;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 50px;
+                z-index: 1;
+            }
+
+            .navbar-container {
+                display: contents;
+                justify-content: space-between;
+                align-items: center;
+                height: 100%;
+                padding: 0 15px;
+            }
+
+            .navbar-brand {
+                font-weight: bold;
+                font-size: 1.2em;
+                color: white;
+                text-decoration: none;
+            }
+
+            .navbar-toggle {
+                display: none;
+                cursor: pointer;
+                padding: 10px;
+                position: absolute;
+                right: 15px;
+                top: 50%;
+                transform: translateY(-50%);
+            }
+
+            .navbar-toggle .bar {
+                display: block;
+                width: 25px;
+                height: 3px;
+                background-color: white;
+                margin: 5px 0;
+                transition: 0.3s;
+            }
+
+            .navbar-menu {
+                display: flex;
+                align-items: center;
+            }
+
+            .navbar-menu a {
+                color: white;
+                text-decoration: none;
+                padding: 0 10px;
+            }
+
+            /* Responsive Navigation Styles */
+            @media screen and (max-width: 768px) {
+                .navbar-toggle {
+                    display: block;
+                }
+
+                .navbar-menu {
+                    display: none; /* Hide menu by default on mobile */
+                    background-color: #333;
+                    position: absolute;
+                    top: 50px;
+                    right: 0;
+                    width: 250px;
+                    padding: 10px 0;
+                }
+
+                .navbar-menu.open {
+                    display: block; /* Show menu when open */
+                }
+
+                .navbar-menu a {
+                    display: block;
+                    padding: 10px 20px;
+                    text-align: left;
+                }
+
+                /* Animation for the hamburger icon */
+                .navbar-toggle.open .bar:nth-child(1) {
+                    transform: translateY(8px) rotate(45deg);
+                }
+
+                .navbar-toggle.open .bar:nth-child(2) {
+                    opacity: 0;
+                }
+
+                .navbar-toggle.open .bar:nth-child(3) {
+                    transform: translateY(-8px) rotate(-45deg);
+                }
+            }
+
+            .container2 {
+                padding-top: 80px;
+            }
+
+            footer {
+                background-color: #333; /* Match header background */
+                padding: 5px 10px; /* Reduced padding */
+                text-align: center;
+                position: fixed;
+                bottom: 0;
+                width: 100%;
+            }
+
+            footer p { /* Style footer text */
+                color: white; /* White text */
+                margin: 0;
+                font-size: 10px; /* Reduced font size */
+            }
+        </style>
+    </head>
+    <body>
+        <nav class="navbar">
+            <div class="navbar-container">
+                <a href="/" class="navbar-brand">Medical AI Assistant</a>
+                <div class="navbar-toggle" onclick="toggleNavbar()">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+                <div class="navbar-menu">
+                    <a href="/">Home</a>
+                    <a href="/diagnosis">Diagnosis Assistant</a>
+                    <a href="/medicine">Medicine Information</a>
+                    <a href="/image">Image Analysis</a>
+                    <a href="/chat">Medical Chatbot</a>
+                    <a href="/history">History</a> 
+                    <a href="/logout">Sign Out</a> 
+                </div>
+            </div>
+        </nav>
+
+        <h1 class="container2">History</h1>
+
+        <div class="container">
+            <h2>Diagnosis History</h2>
+            <ul>
+                {% for interaction in diagnosis_history %}
+                <li>
+                    <div class="interaction-header" onclick="toggleContent(this)">
+                        {{ interaction.filename }} 
+                        <a href="/history/diagnosis/{{ interaction.filename }}" target="_blank" download>
+                            <button>Download Text</button> 
+                        </a>
+                    </div>
+                    <pre class="interaction-content">{{ interaction.content }}</pre>
+                </li>
+                {% endfor %}
+            </ul>
+
+            <h2>Medicine History</h2>
+            <ul>
+                {% for interaction in medicine_history %}
+                <li>
+                    <div class="interaction-header" onclick="toggleContent(this)">
+                        {{ interaction.filename }} 
+                        <a href="/history/medicine/{{ interaction.filename }}" target="_blank" download>
+                            <button>Download Text</button> 
+                        </a>
+                    </div>
+                    <pre class="interaction-content">{{ interaction.content }}</pre>
+                </li>
+                {% endfor %}
+            </ul>
+
+            <h2>Image History</h2>
+            <ul>
+                {% for interaction in image_history %}
+                <li>
+                    <div class="interaction-header" onclick="toggleContent(this)">
+                        {{ interaction.filename }}
+                        <a href="/history/image/{{ interaction.filename }}" target="_blank" download>
+                            <button>Download Text</button> 
+                        </a>
+                    </div>
+                    <pre class="interaction-content">{{ interaction.content }}</pre>
+                </li>
+                {% endfor %}
+            </ul>
+
+            <h2>Chat History</h2>
+            <ul>
+                {% for interaction in chatbot_history %}
+                <li>
+                    <div class="interaction-header" onclick="toggleContent(this)">
+                        {{ interaction.filename }} 
+                        <a href="/history/chat/{{ interaction.filename }}" target="_blank" download>
+                            <button>Download Text</button> 
+                        </a>
+                    </div>
+                    <pre class="interaction-content">{{ interaction.content }}</pre>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <br><br>
+
+        <footer>
+            <p>© 2024 Created by Mirza Milan Farabi. Powered by Gemini API.</p>
+        </footer>
+
+        <script>
+            function toggleContent(headerElement) {
+                const contentElement = headerElement.nextElementSibling;
+                contentElement.style.display = contentElement.style.display === 'block' ? 'none' : 'block';
+            }
+        </script>
+
+        <script>
+            function toggleNavbar() {
+                // Toggle the 'open' class on both the toggle and the menu
+                document.querySelector('.navbar-toggle').classList.toggle('open');
+                document.querySelector('.navbar-menu').classList.toggle('open');
+            }
+        </script>
+
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    </body>
+</html>

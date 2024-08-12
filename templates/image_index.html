@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" />
+        <title>Medical Image Analysis</title>
+        <style>
+            /* Navigation Bar Styles */
+            .navbar {
+                background-color: #333;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 50px;
+                z-index: 1;
+            }
+
+            .navbar-container {
+                display: contents;
+                justify-content: space-between;
+                align-items: center;
+                height: 100%;
+                padding: 0 15px;
+            }
+
+            .navbar-brand {
+                font-weight: bold;
+                font-size: 1.2em;
+                color: white;
+                text-decoration: none;
+            }
+
+            .navbar-toggle {
+                display: none;
+                cursor: pointer;
+                padding: 10px;
+                position: absolute;
+                right: 15px;
+                top: 50%;
+                transform: translateY(-50%);
+            }
+
+            .navbar-toggle .bar {
+                display: block;
+                width: 25px;
+                height: 3px;
+                background-color: white;
+                margin: 5px 0;
+                transition: 0.3s;
+            }
+
+            .navbar-menu {
+                display: flex;
+                align-items: center;
+            }
+
+            .navbar-menu a {
+                color: white;
+                text-decoration: none;
+                padding: 0 10px;
+            }
+
+            /* Responsive Navigation Styles */
+            @media screen and (max-width: 768px) {
+                .navbar-toggle {
+                    display: block;
+                }
+
+                .navbar-menu {
+                    display: none; /* Hide menu by default on mobile */
+                    background-color: #333;
+                    position: absolute;
+                    top: 50px;
+                    right: 0;
+                    width: 250px;
+                    padding: 10px 0;
+                }
+
+                .navbar-menu.open {
+                    display: block; /* Show menu when open */
+                }
+
+                .navbar-menu a {
+                    display: block;
+                    padding: 10px 20px;
+                    text-align: left;
+                }
+
+                /* Animation for the hamburger icon */
+                .navbar-toggle.open .bar:nth-child(1) {
+                    transform: translateY(8px) rotate(45deg);
+                }
+
+                .navbar-toggle.open .bar:nth-child(2) {
+                    opacity: 0;
+                }
+
+                .navbar-toggle.open .bar:nth-child(3) {
+                    transform: translateY(-8px) rotate(-45deg);
+                }
+            }
+
+            .container2 { 
+                padding-top: 80px; 
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                
+            }
+
+            body {
+                font-family: 'Arial', sans-serif;
+                background-color: #f8f9fa;
+                margin: 0;
+                padding-top: 0;
+            }
+
+            .container {
+                background-color: #fff;
+                border-radius: 10px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                padding: 40px;
+                text-align: center;
+                width: 50%; /* Adjust width as needed */
+            }
+
+            h1 {
+                text-align: center;
+                display: block;
+                font-size: 2em;
+                margin-block-start: 0.67em;
+                margin-block-end: 0.67em;
+                margin-inline-start: 0px;
+                margin-inline-end: 0px;
+                font-weight: bold;
+                unicode-bidi: isolate;
+                background-color: white; /* Background color of the text */
+                color: #007bff;  /* Text color */
+            }
+
+            input[type="file"] {
+                display: none;
+            }
+
+            label {
+                background-color: #007bff;
+                color: white;
+                padding: 12px 20px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background-color 0.3s;
+            }
+
+            label:hover {
+                background-color: #0056b3;
+            }
+
+            select {
+                margin-top: 20px;
+                padding: 10px;
+                border: 1px solid #ced4da;
+                border-radius: 5px;
+                width: 100%;
+            }
+
+            button {
+                margin-top: 20px;
+                padding: 12px 20px;
+                background-color: #28a745;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background-color 0.3s;
+            }
+
+            button:hover {
+                background-color: #218838;
+            }
+
+            #customPromptDiv {
+                display: none;
+                margin-top: 20px;
+            }
+
+            #customPromptDiv textarea {
+                width: 100%;
+                height: 80px;
+                padding: 10px;
+                border: 1px solid #ced4da;
+                border-radius: 5px;
+            }
+
+            #imagePreview { /* Style for the image preview */
+                max-width: 300px;
+                max-height: 200px;
+                margin-top: 20px;
+                display: none; /* Hide the image initially */
+                margin: 20px auto; /* Center the image horizontally */
+            }
+
+            footer {
+                background-color: #333; /* Match header background */
+                padding: 5px 10px; /* Reduced padding */
+                text-align: center;
+                position: fixed;
+                bottom: 0;
+                width: 100%;
+            }
+
+            footer p { /* Style footer text */
+                color: white; /* White text */
+                margin: 0;
+                font-size: 10px; /* Reduced font size */
+            }
+        </style>
+        <script>
+            function toggleCustomPrompt() {
+                var analysisType = document.getElementById("analysis_type").value;
+                var customPromptDiv = document.getElementById("customPromptDiv");
+
+                // Show the custom prompt div only if "custom_image" is selected
+                if (analysisType === "custom_image") {
+                    customPromptDiv.style.display = 'block';
+                } else {
+                    customPromptDiv.style.display = 'none';
+                }
+            }
+
+            function previewImage() {
+                var preview = document.getElementById("imagePreview");
+                var file = document.getElementById("imageUpload").files[0];
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                    preview.style.display = "block"; // Show the image after it's loaded
+                }
+
+                if (file) {
+                    reader.readAsDataURL(file);
+                } else {
+                    preview.src = ""; // Reset if no file is selected
+                    preview.style.display = "none"; // Hide the image again
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <nav class="navbar">
+            <div class="navbar-container">
+                <a href="/" class="navbar-brand">Medical AI Assistant</a>
+                <div class="navbar-toggle" onclick="toggleNavbar()">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+                <div class="navbar-menu">
+                    <a href="/">Home</a>
+                    <a href="/diagnosis">Diagnosis Assistant</a>
+                    <a href="/medicine">Medicine Information</a>
+                    <a href="/image">Image Analysis</a>
+                    <a href="/chat">Medical Chatbot</a>
+                    <a href="/history">History</a> 
+                    <a href="/logout">Sign Out</a> 
+                </div>
+            </div>
+        </nav>
+
+        <div class="container2"> 
+            <div class="container">
+                <h1>Medical Image Analysis</h1>
+                <form method="POST" enctype="multipart/form-data">
+                    <input type="file" name="image" id="imageUpload" onchange="previewImage()">
+                    <label for="imageUpload">Choose Image</label>
+
+                    <img id="imagePreview" src="" alt="Image Preview">
+
+                    <select name="analysis_type" id="analysis_type" onchange="toggleCustomPrompt()">
+                        <option value="xray_description">X-Ray Description</option>
+                        <option value="skin_cancer">Detect Skin Cancer</option>
+                        <option value="tumor_detection">Tumor Detection (Any Image)</option>
+                        <option value="lesion_detection">Lesion/Bite Mark Detection</option>
+                        <option value="pregnancy_detection">Pregnancy Detection (Any Image)</option>
+                        <option value="medical_image">Medical Image Detection</option>
+                        <option value="custom_image">Custom Image Detection</option>
+                    </select>
+
+                    <div id="customPromptDiv"> 
+                        <label for="custom_prompt">Custom Prompt:</label><br><br>
+                        <textarea name="custom_prompt" id="custom_prompt" rows="4" cols="50"></textarea>
+                    </div>
+
+                    <button type="submit">Analyze</button>
+                </form>
+            </div>
+        <br><br>
+        </div>
+
+        <footer>
+            <p>© 2024 Created by Mirza Milan Farabi. Powered by Gemini API.</p>
+        </footer>
+
+        <script>
+            function toggleNavbar() {
+                // Toggle the 'open' class on both the toggle and the menu
+                document.querySelector('.navbar-toggle').classList.toggle('open');
+                document.querySelector('.navbar-menu').classList.toggle('open');
+            }
+        </script>
+
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    </body>
+</html>

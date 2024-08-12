@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" />
+        <title>Medical & Science Chatbot</title>
+        <style>
+            /* Navigation Bar Styles */
+            .navbar {
+                background-color: #333;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 50px;
+                z-index: 1;
+            }
+
+            .navbar-container {
+                display: contents;
+                justify-content: space-between;
+                align-items: center;
+                height: 100%;
+                padding: 0 15px;
+            }
+
+            .navbar-brand {
+                font-weight: bold;
+                font-size: 1.2em;
+                color: white;
+                text-decoration: none;
+            }
+
+            .navbar-toggle {
+                display: none;
+                cursor: pointer;
+                padding: 10px;
+                position: absolute;
+                right: 15px;
+                top: 50%;
+                transform: translateY(-50%);
+            }
+
+            .navbar-toggle .bar {
+                display: block;
+                width: 25px;
+                height: 3px;
+                background-color: white;
+                margin: 5px 0;
+                transition: 0.3s;
+            }
+
+            .navbar-menu {
+                display: flex;
+                align-items: center;
+            }
+
+            .navbar-menu a {
+                color: white;
+                text-decoration: none;
+                padding: 0 10px;
+            }
+
+            /* Responsive Navigation Styles */
+            @media screen and (max-width: 768px) {
+                .navbar-toggle {
+                    display: block;
+                }
+
+                .navbar-menu {
+                    display: none; /* Hide menu by default on mobile */
+                    background-color: #333;
+                    position: absolute;
+                    top: 50px;
+                    right: 0;
+                    width: 250px;
+                    padding: 10px 0;
+                }
+
+                .navbar-menu.open {
+                    display: block; /* Show menu when open */
+                }
+
+                .navbar-menu a {
+                    display: block;
+                    padding: 10px 20px;
+                    text-align: left;
+                }
+
+                /* Animation for the hamburger icon */
+                .navbar-toggle.open .bar:nth-child(1) {
+                    transform: translateY(8px) rotate(45deg);
+                }
+
+                .navbar-toggle.open .bar:nth-child(2) {
+                    opacity: 0;
+                }
+
+                .navbar-toggle.open .bar:nth-child(3) {
+                    transform: translateY(-8px) rotate(-45deg);
+                }
+            }
+
+            footer {
+                background-color: #333; /* Match header background */
+                padding: 5px 10px; /* Reduced padding */
+                text-align: center;
+                position: fixed;
+                bottom: 0;
+                width: 100%;
+            }
+
+            footer p { /* Style footer text */
+                color: white; /* White text */
+                margin: 0;
+                font-size: 10px; /* Reduced font size */
+            }
+
+            body {
+                font-family: sans-serif;
+                background-color: #f2f2f2;
+                margin: 0;
+                padding-top: 0; /* Add padding to avoid content overlap with navbar */
+            }
+
+            h1 {
+                text-align: center;
+                display: block;
+                font-size: 2em;
+                margin-block-start: 0.67em;
+                margin-block-end: 0.67em;
+                margin-inline-start: 0px;
+                margin-inline-end: 0px;
+                font-weight: bold;
+                unicode-bidi: isolate;
+                padding-top: 30px;
+                padding-bottom: 30px;
+            }
+
+            .inverted-color {
+                background-color: white; /* Background color of the text */
+                color: #007bff;  /* Text color */
+            }
+
+            form {
+                background-color: white;
+                margin: 20px auto;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                max-width: 500px;
+            }
+
+            label {
+                display: block;
+                margin-bottom: 5px;
+            }
+
+            input[type="text"],
+            select,
+            textarea {
+                width: calc(100% - 20px);
+                padding: 8px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                box-sizing: border-box;
+                margin-bottom: 10px;
+            }
+
+            textarea {
+                height: 120px;
+                resize: vertical;
+            }
+
+            button {
+                background-color: #28a745;
+                color: white;
+                padding: 10px 20px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+            }
+
+            button:hover {
+                background-color: #218838;
+            }
+
+            /* Unique CSS for molecule inputs */
+            #molecule-inputs > div {
+                display: flex;
+                align-items: center; /* Align items vertically */
+                justify-content: center; /* Center items horizontally */
+            }
+
+            #molecule-inputs label {
+                margin-right: 10px; /* Add space between labels and inputs */
+                white-space: nowrap; /* Prevent labels from wrapping */
+            }
+
+            #molecule-inputs input[type="text"] {
+                width: 150px; /* Set a fixed width for the input boxes */
+            }
+
+            /* Unique CSS for the Number of Molecules input */
+            #num-molecules {
+                width: 80px; /* Make the input box smaller */
+                border: 2px solid #007bff; /* Blue border */
+                border-radius: 6px; /* Rounded corners */
+                height: 30px; /* Make the height slightly bigger */
+                text-align: center; /* Center the input text */
+            }
+
+            #molecule-inputs label:nth-child(2n) {
+                margin-left: 20px; /* Added more space here */
+            }
+
+            #molecule-inputs input:nth-child(2n) {
+                width: 80px; /* Make property input smaller */
+            }
+
+            #molecule-inputs input:nth-child(2n-1) {
+                width: 150px; /* Make molecule input bigger */
+            }
+
+            #molecule-fields .num-molecules-button {
+                display: inline-block;
+                margin-left: 10px;
+                padding: 8px 12px;
+                background-color: #28a745;
+                color: white;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+            }
+
+            #molecule-fields .num-molecules-button:hover {
+                background-color: #218838;
+            }
+            .container {
+                padding-top: 80px;
+            }
+        </style>
+    </head>
+    <body>
+        <nav class="navbar">
+            <div class="navbar-container">
+                <a href="/" class="navbar-brand">Medical AI Assistant</a>
+                <div class="navbar-toggle" onclick="toggleNavbar()">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+                <div class="navbar-menu">
+                    <a href="/">Home</a>
+                    <a href="/diagnosis">Diagnosis Assistant</a>
+                    <a href="/medicine">Medicine Information</a>
+                    <a href="/image">Image Analysis</a>
+                    <a href="/chat">Medical Chatbot</a>
+                    <a href="/history">History</a> 
+                    <a href="/logout">Sign Out</a> 
+                </div>
+            </div>
+        </nav>
+
+        <div class="container">
+            <h1 class="inverted-color">Medical & Science Chatbot</h1>
+            <form method="POST" action="/chat"> 
+                <label for="topic">Select Topic (or type your own):</label><br>
+                <input type="text" list="topics" name="topic" id="topic" placeholder="e.g., Medicine, Genetics">
+                <datalist id="topics">
+                    <option value="Anatomy">
+                    <option value="Artificial Organs">
+                    <option value="Bioinformatics">
+                    <option value="Biomaterials">
+                    <option value="Biomedical Engineering">
+                    <option value="Cardiology">
+                    <option value="Chemical Reactions"> 
+                    <option value="Chemistry">
+                    <option value="Dermatology">
+                    <option value="Drug Discovery">
+                    <option value="Endocrinology">
+                    <option value="Gastroenterology">
+                    <option value="Genetics">
+                    <option value="Health Informatics">
+                    <option value="Hematology">
+                    <option value="Herbal Medicine">
+                    <option value="Immunology">
+                    <option value="Mathematics">
+                    <option value="Medical Imaging">
+                    <option value="Medicine">
+                    <option value="Microbiology">
+                    <option value="Nanotechnology in Medicine"> 
+                    <option value="Nephrology">
+                    <option value="Neurology">
+                    <option value="Oncology">
+                    <option value="Pathology">
+                    <option value="Pharmaceutical Technology">
+                    <option value="Pharmacology">
+                    <option value="Physics">
+                    <option value="Physiology">
+                    <option value="Psychiatry">
+                    <option value="Pulmonology">
+                    <option value="Radiology">
+                    <option value="Rheumatology">
+                    <option value="Surgery">
+                    <option value="Traditional Medicine">
+                    <option value="Telemedicine">
+                    <option value="Medical Ethics">
+                    <option value="Public Health">
+                    <option value="Medical Devices"> 
+                </datalist><br><br>
+
+                <div id="molecule-fields" style="display: none;">
+                    <label for="num-molecules">Number of Molecules:</label><br>
+                    <input type="number" name="num-molecules" id="num-molecules" min="1">
+                    <button type="button" class="num-molecules-button" onclick="createMoleculeInputs()">OK</button><br><br>
+
+                    <div id="molecule-inputs"></div>
+                </div>
+
+                <label for="prompt">Ask your question:</label><br>
+                <textarea name="prompt" id="prompt"></textarea><br>
+                <button type="submit">Get Answer</button>
+            </form>
+            <br><br>
+        </div>
+
+        <footer>
+            <p>© 2024 Created by Mirza Milan Farabi. Powered by Gemini API.</p>
+        </footer>
+
+        <script>
+            const topicSelect = document.getElementById('topic');
+            const moleculeFields = document.getElementById('molecule-fields');
+            const moleculeInputs = document.getElementById('molecule-inputs');
+
+            topicSelect.addEventListener('change', function () {
+                if (this.value === 'Chemical Reactions') {
+                    moleculeFields.style.display = 'block';
+                } else {
+                    moleculeFields.style.display = 'none';
+                    moleculeInputs.innerHTML = ''; // Clear any existing inputs
+                }
+            });
+
+            function createMoleculeInputs() {
+                const numMolecules = parseInt(document.getElementById('num-molecules').value);
+                moleculeInputs.innerHTML = ''; // Clear previous inputs
+
+                for (let i = 1; i <= numMolecules; i++) {
+                    const moleculeDiv = document.createElement('div');
+
+                    const moleculeLabel = document.createElement('label');
+                    moleculeLabel.textContent = `Molecule ${i}: `;
+                    const moleculeInput = document.createElement('input');
+                    moleculeInput.type = 'text';
+                    moleculeInput.name = `molecule-${i}`;
+                    moleculeInput.required = true;
+                    moleculeInput.style.textAlign = 'center';
+                    moleculeDiv.appendChild(moleculeLabel);
+                    moleculeDiv.appendChild(moleculeInput);
+
+                    const propertyLabel = document.createElement('label');
+                    propertyLabel.textContent = ` Property of Molecule ${i}: `;
+                    propertyLabel.style.marginLeft = '25px';
+                    propertyLabel.style.textAlign = 'center';
+                    const propertyInput = document.createElement('input');
+                    propertyInput.type = 'text';
+                    propertyInput.name = `property-${i}`;
+                    propertyInput.required = true;
+                    propertyInput.style.textAlign = 'center';
+                    moleculeDiv.appendChild(propertyLabel);
+                    moleculeDiv.appendChild(propertyInput);
+
+                    moleculeInputs.appendChild(moleculeDiv);
+                }
+            }
+        </script>
+
+        <script>
+            function toggleNavbar() {
+                // Toggle the 'open' class on both the toggle and the menu
+                document.querySelector('.navbar-toggle').classList.toggle('open');
+                document.querySelector('.navbar-menu').classList.toggle('open');
+            }
+        </script>
+
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    </body>
+</html>
