@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" />
+        <title>Diagnosis Assistant</title>
+        <style>
+            body {
+                font-family: sans-serif;
+                background-color: #f2f2f2;
+                margin: 0;
+                padding: 0;
+            }
+
+            h1 {
+                text-align: center;
+                display: block;
+                font-size: 2em;
+                margin-block-start: 0.67em;
+                margin-block-end: 0.67em;
+                margin-inline-start: 0px;
+                margin-inline-end: 0px;
+                font-weight: bold;
+                unicode-bidi: isolate;
+                background-color: white; /* Background color of the text */
+                color: #007bff;  /* Text color */
+                padding-bottom: 30px;
+            }
+
+            h2 {
+                text-align: center;
+                padding: 20px;
+                background-color: #007bff;
+                color: white;
+            }
+
+            form {
+                background-color: white;
+                margin: 20px auto;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                max-width: 800px;
+            }
+
+            label {
+                display: block;
+                margin-bottom: 5px;
+            }
+
+            input[type="text"],
+            input[type="number"],
+            select,
+            textarea {
+                width: 100%;
+                padding: 8px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                box-sizing: border-box;
+                margin-bottom: 10px;
+            }
+
+            /* Style for radio buttons and their labels */
+            .radio-group {
+                display: flex;
+                align-items: center; /* Vertically align radio button and label */
+                margin-bottom: 10px;
+            }
+
+            .radio-group input[type="radio"] {
+                margin-right: 5px;
+            }
+
+            button {
+                background-color: #28a745;
+                color: white;
+                padding: 10px 20px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+            }
+
+            button:hover {
+                background-color: #218838;
+            }
+
+            #symptoms_section,
+            #disease_section {
+                margin-top: 10px;
+            }
+
+            /* Navigation Bar Styles */
+            .navbar {
+                background-color: #333;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 50px;
+                z-index: 1;
+            }
+
+            .navbar-container {
+                display: contents;
+                justify-content: space-between;
+                align-items: center;
+                height: 100%;
+                padding: 0 15px;
+            }
+
+            .navbar-brand {
+                font-weight: bold;
+                font-size: 1.2em;
+                color: white;
+                text-decoration: none;
+            }
+
+            .navbar-toggle {
+                display: none;
+                cursor: pointer;
+                padding: 10px;
+                position: absolute;
+                right: 15px;
+                top: 50%;
+                transform: translateY(-50%);
+            }
+
+            .navbar-toggle .bar {
+                display: block;
+                width: 25px;
+                height: 3px;
+                background-color: white;
+                margin: 5px 0;
+                transition: 0.3s;
+            }
+
+            .navbar-menu {
+                display: flex;
+                align-items: center;
+            }
+
+            .navbar-menu a {
+                color: white;
+                text-decoration: none;
+                padding: 0 10px;
+            }
+
+            /* Responsive Navigation Styles */
+            @media screen and (max-width: 768px) {
+                .navbar-toggle {
+                    display: block;
+                }
+
+                .navbar-menu {
+                    display: none; /* Hide menu by default on mobile */
+                    background-color: #333;
+                    position: absolute;
+                    top: 50px;
+                    right: 0;
+                    width: 250px;
+                    padding: 10px 0;
+                }
+
+                .navbar-menu.open {
+                    display: block; /* Show menu when open */
+                }
+
+                .navbar-menu a {
+                    display: block;
+                    padding: 10px 20px;
+                    text-align: left;
+                }
+
+                /* Animation for the hamburger icon */
+                .navbar-toggle.open .bar:nth-child(1) {
+                    transform: translateY(8px) rotate(45deg);
+                }
+
+                .navbar-toggle.open .bar:nth-child(2) {
+                    opacity: 0;
+                }
+
+                .navbar-toggle.open .bar:nth-child(3) {
+                    transform: translateY(-8px) rotate(-45deg);
+                }
+            }
+
+            footer {
+                background-color: #333; /* Match header background */
+                padding: 5px 10px; /* Reduced padding */
+                text-align: center;
+                position: fixed;
+                bottom: 0;
+                width: 100%;
+            }
+
+            footer p { /* Style footer text */
+                color: white; /* White text */
+                margin: 0;
+                font-size: 10px; /* Reduced font size */
+            }
+
+            .container {
+                padding-top: 80px;
+            }
+        </style>
+    </head>
+    <body>
+        <nav class="navbar">
+            <div class="navbar-container">
+                <a href="/" class="navbar-brand">Medical AI Assistant</a>
+                <div class="navbar-toggle" onclick="toggleNavbar()">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+                <div class="navbar-menu">
+                    <a href="/">Home</a>
+                    <a href="/diagnosis">Diagnosis Assistant</a>
+                    <a href="/medicine">Medicine Information</a>
+                    <a href="/image">Image Analysis</a>
+                    <a href="/chat">Medical Chatbot</a>
+                    <a href="/history">History</a> 
+                    <a href="/logout">Sign Out</a> 
+                </div>
+            </div>
+        </nav>
+
+        <h1 class="container">Diagnosis Assistant</h1>
+
+        <form method="POST" action="/diagnosis">
+            <label for="gender">Gender:</label>
+            <select id="gender" name="gender">
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+            </select>
+            <input type="text" id="other_gender" name="other_gender" placeholder="Specify gender" style="display: none;">
+
+            <label for="age">Age:</label>
+            <input type="number" id="age" name="age" min="0" required>
+
+            <label for="diabetes">Diabetes:</label>
+            <select id="diabetes" name="diabetes">
+                <option value="no">No</option>
+                <option value="yes">Yes</option>
+            </select>
+
+            <label for="previous_diseases">Previous Diseases (if any, separated by commas):</label>
+            <input type="text" id="previous_diseases" name="previous_diseases" value="None">
+
+            <h3>Choose an option:</h3>
+
+            <div class="radio-group">
+                <input type="radio" id="by_symptoms" name="choice" value="1" checked>
+                <label for="by_symptoms">Enter Symptoms</label>
+            </div>
+            <div class="radio-group">
+                <input type="radio" id="by_disease" name="choice" value="2">
+                <label for="by_disease">Enter Disease Name</label>
+            </div>
+
+            <div id="symptoms_section">
+                <label for="symptoms">Enter your symptoms (separated by commas):</label>
+                <textarea id="symptoms" name="symptoms" rows="4" cols="50" placeholder="e.g., headache, fever, cough"></textarea>
+            </div>
+
+            <div id="disease_section" style="display:none;">
+                <label for="disease">Enter the disease name:</label>
+                <input type="text" id="disease" name="disease">
+            </div>
+
+            <button type="submit">Get Diagnosis Insights</button>
+        </form>
+        <br><br>
+
+        <footer>
+            <p>© 2024 Created by Mirza Milan Farabi. Powered by Gemini API.</p>
+        </footer>
+
+        <script>
+            // Simple JavaScript to show/hide input fields based on radio button selection
+            const symptomsRadio = document.getElementById('by_symptoms');
+            const diseaseRadio = document.getElementById('by_disease');
+            const symptomsSection = document.getElementById('symptoms_section');
+            const diseaseSection = document.getElementById('disease_section');
+
+            symptomsRadio.addEventListener('change', () => {
+                symptomsSection.style.display = 'block';
+                diseaseSection.style.display = 'none';
+            });
+
+            diseaseRadio.addEventListener('change', () => {
+                symptomsSection.style.display = 'none';
+                diseaseSection.style.display = 'block';
+            });
+
+            // JavaScript for "Other" gender option
+            const genderSelect = document.getElementById('gender');
+            const otherGenderInput = document.getElementById('other_gender');
+
+            genderSelect.addEventListener('change', () => {
+                if (genderSelect.value === 'other') {
+                    otherGenderInput.style.display = 'block';
+                } else {
+                    otherGenderInput.style.display = 'none';
+                }
+            });
+        </script>
+
+        <script>
+            function toggleNavbar() {
+                // Toggle the 'open' class on both the toggle and the menu
+                document.querySelector('.navbar-toggle').classList.toggle('open');
+                document.querySelector('.navbar-menu').classList.toggle('open');
+            }
+        </script>
+
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    </body>
+</html>

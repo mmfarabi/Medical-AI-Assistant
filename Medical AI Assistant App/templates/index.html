@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" />
+        <title>Medical AI Assistant</title>
+        <style>
+            body {
+                font-family: sans-serif;
+                background: linear-gradient(to bottom, #f2f2f2, #e0e0e0); /* Gradient background */
+                margin: 0;
+                padding: 0;
+            }
+
+            h1 {
+                text-align: center;
+                display: block;
+                font-size: 2em;
+                margin-block-start: 0.67em;
+                margin-block-end: 0.67em;
+                margin-inline-start: 0px;
+                margin-inline-end: 0px;
+                font-weight: bold;
+                unicode-bidi: isolate;
+                background-color: white; /* Background color of the text */
+                color: #007bff;  /* Text color */
+                padding-bottom: 30px;
+            }
+
+            h2 {
+                text-align: center;
+                padding: 20px;
+                background-color: #007bff;
+                color: white;
+            }
+
+            .container {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                align-items: center;
+                min-height: calc(100vh - 50px); /* Adjust height for navigation bar */
+                padding: 20px; /* Add some padding around the cards */
+            }
+
+            .container2 {
+                padding-top: 80px;
+            }
+
+            .card {
+                background-color: white;
+                border-radius: 15px; /* More rounded corners */
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Stronger shadow */
+                margin: 10px; /* Reduced margin */
+                padding: 20px;
+                text-align: center;
+                width: 48%; /* Make cards 48% wide, leaving space for margin */
+                transition: transform 0.2s ease; /* Add transition for hover effect */
+                border: 2px solid #007bff; /* Blue border */ /* Match the blue color */
+            }
+
+            .card:hover {
+                transform: translateY(-5px); /* Slightly raise the card on hover */
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Increase shadow on hover */
+            }
+
+            .card a {
+                display: inline-block;
+                padding: 12px 25px; /* More padding */
+                background-color: #28a745; /* Green color */
+                color: white;
+                text-decoration: none;
+                border-radius: 5px;
+                transition: background-color 0.3s;
+            }
+
+            .card a:hover {
+                background-color: #218838; /* Darker green on hover */
+            }
+
+            .card h3 {
+                margin-bottom: 10px;
+                font-size: 1.3em; /* Slightly larger heading */
+                color: #007bff; /* Match the blue color */
+            }
+
+            .card p {
+                margin-bottom: 15px;
+                font-size: 0.9em; /* Reduced font size */ /* Adjust font size as needed */
+                color: #333; /* Darker gray for better contrast */
+                font-weight: bold; /* Make the paragraph text bold */
+            }
+
+            /* Navigation Bar Styles */
+            .navbar {
+                background-color: #333;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 50px;
+                z-index: 1;
+            }
+
+            .navbar-container {
+                display: contents;
+                justify-content: space-between;
+                align-items: center;
+                height: 100%;
+                padding: 0 15px;
+            }
+
+            .navbar-brand {
+                font-weight: bold;
+                font-size: 1.2em;
+                color: white;
+                text-decoration: none;
+            }
+
+            .navbar-toggle {
+                display: none;
+                cursor: pointer;
+                padding: 10px;
+                position: absolute;
+                right: 15px;
+                top: 50%;
+                transform: translateY(-50%);
+            }
+
+            .navbar-toggle .bar {
+                display: block;
+                width: 25px;
+                height: 3px;
+                background-color: white;
+                margin: 5px 0;
+                transition: 0.3s;
+            }
+
+            .navbar-menu {
+                display: flex;
+                align-items: center;
+            }
+
+            .navbar-menu a {
+                color: white;
+                text-decoration: none;
+                padding: 0 10px;
+            }
+
+            /* Responsive Navigation Styles */
+            @media screen and (max-width: 768px) {
+                .navbar-toggle {
+                    display: block;
+                }
+
+                .navbar-menu {
+                    display: none; /* Hide menu by default on mobile */
+                    background-color: #333;
+                    position: absolute;
+                    top: 50px;
+                    right: 0;
+                    width: 250px;
+                    padding: 10px 0;
+                }
+
+                .navbar-menu.open {
+                    display: block; /* Show menu when open */
+                }
+
+                .navbar-menu a {
+                    display: block;
+                    padding: 10px 20px;
+                    text-align: left;
+                }
+
+                /* Animation for the hamburger icon */
+                .navbar-toggle.open .bar:nth-child(1) {
+                    transform: translateY(8px) rotate(45deg);
+                }
+
+                .navbar-toggle.open .bar:nth-child(2) {
+                    opacity: 0;
+                }
+
+                .navbar-toggle.open .bar:nth-child(3) {
+                    transform: translateY(-8px) rotate(-45deg);
+                }
+            }
+
+            footer {
+                background-color: #333; /* Match header background */
+                padding: 5px 10px; /* Reduced padding */
+                text-align: center;
+                position: fixed;
+                bottom: 0;
+                width: 100%;
+            }
+
+            footer p { /* Style footer text */
+                color: white; /* White text */
+                margin: 0;
+                font-size: 10px; /* Reduced font size */
+            }
+        </style>
+    </head>
+    <body>
+        <nav class="navbar">
+            <div class="navbar-container">
+                <a href="/" class="navbar-brand">Medical AI Assistant</a>
+                <div class="navbar-toggle" onclick="toggleNavbar()">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+                <div class="navbar-menu">
+                    <a href="/">Home</a>
+                    <a href="/diagnosis">Diagnosis Assistant</a>
+                    <a href="/medicine">Medicine Information</a>
+                    <a href="/image">Image Analysis</a>
+                    <a href="/chat">Medical Chatbot</a>
+                    <a href="/history">History</a> 
+                    <a href="/logout">Sign Out</a> 
+                </div>
+            </div>
+        </nav>
+
+        <h1 class="container2">Welcome to the Medical AI Assistant!</h1>
+
+        <div class="container">
+            <div class="card">
+                <h3><a href="/diagnosis">Diagnosis Assistant</a></h3>
+                <p>Get AI-powered insights on potential conditions based on symptoms.</p>
+            </div>
+
+            <div class="card">
+                <h3><a href="/image">Image Analysis</a></h3>
+                <p>Upload medical images for analysis, such as X-rays or skin images.</p>
+            </div>
+
+            <div class="card">
+                <h3><a href="/medicine">Medicine Information</a></h3>
+                <p>Find detailed information about medicines, including uses, side effects, and more.</p>
+            </div>
+
+            <div class="card">
+                <h3><a href="/chat">Medical Chatbot</a></h3>
+                <p>Chat with our AI assistant to get answers to your health-related questions.</p>
+            </div>
+
+            <div class="card">
+                <h3><a href="/history">History</a></h3>
+                <p>View your past inquiries and responses.</p>
+            </div>
+        </div>
+        <br><br>
+
+        <footer>
+            <p>© 2024 Created by Mirza Milan Farabi. Powered by Gemini API.</p>
+        </footer>
+
+
+        <script>
+            function toggleNavbar() {
+                // Toggle the 'open' class on both the toggle and the menu
+                document.querySelector('.navbar-toggle').classList.toggle('open');
+                document.querySelector('.navbar-menu').classList.toggle('open');
+            }
+        </script>
+
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    </body>
+</html>
